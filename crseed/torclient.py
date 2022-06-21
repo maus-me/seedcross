@@ -228,14 +228,13 @@ class QbDownloadClient(DownloadClientBase):
         torList = self.qbClient.torrents_info(category=timestamp)
         if torList:
             print('Added: '+torList[0].name)
-            time.sleep(1)
             # torList[0].set_category(category=None)
-            self.qbClient.torrents_remove_categories(timestamp)
             return torList[0]
         else:
             print('Not Added.')
-            self.qbClient.torrents_remove_categories(timestamp)
             return None
+        time.sleep(2) #Give time for QBittorrent to actually complete the action.  Preventing it from leaving a ton of categories spamming.
+        self.qbClient.torrents_remove_categories(timestamp)
 
     def addTorrentUrl(self, tor_url, download_location, tor_title):
         if not self.qbClient:
